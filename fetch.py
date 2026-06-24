@@ -11,24 +11,31 @@ import re
 # 国内金取得（安定版）
 # ------------------------------
 def get_japan_gold():
-    url = "https://gold.tanaka.co.jp/commodity/souba/d-gold.php"
-    headers = {"User-Agent": "Mozilla/5.0"}
+    url = "https://gold.tanaka.co.jp/commodity/souba/"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
 
     try:
         res = requests.get(url, headers=headers)
         soup = BeautifulSoup(res.text, "html.parser")
 
-        rows = soup.find_all("tr")
+        # ★価格は「税込小売価格」テーブルにある
+        tables = soup.find_all("table")
 
-        for row in rows:
-            text = row.get_text()
+        for table in tables:
+            text = table.get_text()
 
-            if "金" in text and "円" in text:
+            if "金" in text and "小売" in text:
+                import re
                 match = re.search(r"([0-9,]+)円", text)
+
                 if match:
                     return float(match.group(1).replace(",", ""))
 
-    except:
+    except Exception as e:
+        print("JP GOLD error:", e)
         return None
 
     return None
