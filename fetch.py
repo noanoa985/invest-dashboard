@@ -4,6 +4,25 @@ import sqlite3
 from datetime import datetime
 import requests
 import os
+import requests
+from bs4 import BeautifulSoup
+
+def get_japan_gold():
+    url = "https://gold.tanaka.co.jp/commodity/souba/d-gold.php"
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, "html.parser")
+
+    prices = soup.find_all("td")
+
+    for i, p in enumerate(prices):
+        if "金" in p.text:
+            try:
+                price = prices[i+1].text.replace(",", "").replace("円","").strip()
+                return float(price)
+            except:
+                return None
+
+    return None
 
 WEBHOOK_URL = os.getenv("SLACK_WEBHOOK")
 
