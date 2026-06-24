@@ -3,3 +3,4 @@ yfinance
 openpyxl
 streamlit
 requests
+beautifulsoup4
