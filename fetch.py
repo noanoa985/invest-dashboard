@@ -7,6 +7,18 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+# 国内金
+jp_gold = get_japan_gold()
+
+if jp_gold:
+    records.append({
+        "date": today,
+        "code": "JP_GOLD",
+        "name": "Gold_JP",
+        "close": jp_gold,
+        "change": 0
+    })
+
 def get_japan_gold():
     url = "https://gold.tanaka.co.jp/commodity/souba/d-gold.php"
     res = requests.get(url)
