@@ -1,6 +1,17 @@
 import streamlit as st
 import pandas as pd
 import sqlite3
+jp = df[df["code"] == "JP_GOLD"]
+global_gold = df[df["code"] == "GOLD"]
+
+if not jp.empty and not global_gold.empty:
+    jp_price = jp.iloc[-1]["close"]
+    gl_price = global_gold.iloc[-1]["close"]
+
+    diff = (jp_price / gl_price) - 1
+
+    st.metric("国内金", jp_price)
+    st.metric("乖離率", f"{diff*100:.2f}%")
 
 st.set_page_config(layout="wide")
 st.title("📊 投資ダッシュボード")
